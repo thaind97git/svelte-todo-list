@@ -11,7 +11,7 @@ function createTodo() {
   }
 
   const { subscribe, update }: Writable<ITodoStore> = writable({
-    items: getItem(TODO_KEY),
+    items: getItem(TODO_KEY) || [],
     currentStatus: 'All'
   })
 
