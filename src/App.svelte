@@ -83,6 +83,15 @@
       </footer>
     {/if}
   </div>
+  <div class="sources">
+    <div class="source">Design by thaind97git</div>
+    <div class="source">
+      Source code
+      <a target="__blank" href="https://github.com/thaind97git/svelte-todo-list"
+        >here</a
+      >
+    </div>
+  </div>
 </main>
 
 <style lang="scss">
