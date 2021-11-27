@@ -5,10 +5,8 @@
 </script>
 
 <div class="todo-list">
-  {#each todoList as todo}
+  {#each todoList as todo (todo.id)}
     <Item {todo} />
-    <!-- {:else}
-    <div>Empty todo</div> -->
   {/each}
 </div>
 

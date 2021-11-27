@@ -62,3 +62,40 @@ export const dispatchForCode = function (event, callback) {
 
   callback(code)
 }
+
+/**
+ * Click Outside
+ * @param {Node} node
+ */
+/**https://github.com/TheComputerM/svelte-materialify/blob/54e4fdb8707caf0c44b4831abfbdd6eb8f5c1208/packages/svelte-materialify/src/actions/ClickOutside/index.js */
+interface ClickOutsideOptions {
+  include?: HTMLElement[]
+}
+
+interface ClickOutsideReturn {
+  destroy(): void
+}
+
+export function ClickOutside(
+  node: HTMLElement,
+  _options: ClickOutsideOptions = {}
+): ClickOutsideReturn {
+  const options = { include: [], ..._options }
+  function detect({ target }) {
+    if (
+      !node.contains(target) ||
+      options.include.some((i) => target.isSameNode(i))
+    ) {
+      node.dispatchEvent(new CustomEvent('clickOutside'))
+    }
+  }
+  document.addEventListener('click', detect, {
+    passive: true,
+    capture: true
+  })
+  return {
+    destroy() {
+      document.removeEventListener('click', detect)
+    }
+  }
+}

@@ -1,13 +1,12 @@
-import { getItem, TODO_KEY } from '@/utils/local-storage'
 import { Writable, writable } from 'svelte/store'
+import { getItem, TODO_KEY } from '@/utils/local-storage'
 
-export type TodoStatus = 'All' | 'Active' | 'Completed'
-export const statuses: TodoStatus[] = ['All', 'Active', 'Completed']
+export const statuses: FilterStatus[] = ['All', 'Active', 'Completed']
 
 function createTodo() {
   interface ITodoStore {
     items: TodoItem[]
-    currentStatus: TodoStatus
+    currentStatus: FilterStatus
   }
 
   const { subscribe, update }: Writable<ITodoStore> = writable({
@@ -67,9 +66,22 @@ function createTodo() {
     })
   }
 
-  const updateStatus = (status: TodoStatus) => {
+  const updateStatus = (status: FilterStatus) => {
     update((prev) => {
       prev.currentStatus = status
+      return prev
+    })
+  }
+
+  const editTitle = (id: string, title: string) => {
+    if (!id || !title) {
+      return
+    }
+    update((prev) => {
+      const editedId = prev.items.findIndex((todo) => todo.id === id)
+      if (editedId) {
+        prev.items[editedId].title = title
+      }
       return prev
     })
   }
@@ -80,7 +92,8 @@ function createTodo() {
     clearCompleted,
     toggleCompleted,
     addNewTodo,
-    updateStatus
+    updateStatus,
+    editTitle
   }
 }
 

@@ -1,26 +1,28 @@
 <script lang="ts">
-  import { TodoStatus, statuses, todoStore } from '@/store/todo'
+  import { onDestroy } from 'svelte'
+  import { statuses, todoStore } from '@/store/todo'
 
   import Input from '@/components/input/index.svelte'
   import TodoList from '@/components/todo/index.svelte'
-  import { clsx, dispatchForCode } from './utils/helpers'
+  import { clsx } from './utils/helpers'
   import { removeItem, setItem, TODO_KEY } from './utils/local-storage'
 
   const TickImg = 'images/svgs/tick.svg'
 
   $: allTodo = $todoStore.items
+  $: activeStatus = $todoStore.currentStatus
   $: todoFiltered =
     activeStatus === 'All'
       ? allTodo
       : activeStatus === 'Active'
       ? allTodo.filter((todo) => !todo.isCompleted)
       : allTodo.filter((todo) => todo.isCompleted)
-  $: activeStatus = $todoStore.currentStatus
   $: count = allTodo.length
+  $: countNotCompleted = allTodo.filter((todo) => !todo.isCompleted).length
   $: isAllCompleted = allTodo.every((todo) => todo.isCompleted)
   $: isSomeCompleted = allTodo.some((todo) => todo.isCompleted)
 
-  const subscribeTodo = todoStore.subscribe(({ items }) => {
+  const unsubscribeTodo = todoStore.subscribe(({ items }) => {
     if (items?.length) {
       setItem(TODO_KEY, items)
     } else {
@@ -28,32 +30,17 @@
     }
   })
 
-  const onKeyUp = (
-    event: WindowEventMap['keyup'] & { target: HTMLInputElement }
-  ) => {
-    const { target } = event
-
-    if (!target.value.trim()) {
-      return
-    }
-
-    dispatchForCode(event, (key) => {
-      if (key === 13 || key === 'Enter') {
-        todoStore.addNewTodo(target.value)
-        target.value = ''
-      }
-    })
-  }
-
   const onClearCompleted = () => {
     todoStore.clearCompleted()
   }
-  const onClickStatus = (status: TodoStatus) => {
+  const onClickStatus = (status: FilterStatus) => {
     todoStore.updateStatus(status)
   }
   const onToggleAll = () => {
     todoStore.toggleCompleted()
   }
+
+  onDestroy(unsubscribeTodo)
 </script>
 
 <main>
@@ -72,17 +59,13 @@
           />
         {/if}
       </div>
-      <Input
-        className="input-todo"
-        on:keyup={onKeyUp}
-        placeholder="What needs to be done ?"
-      />
+      <Input className="input-todo" placeholder="What needs to be done ?" />
     </div>
     <TodoList todoList={todoFiltered} />
     {#if count}
       <footer id="footer">
         <div class="number">
-          {count} item{count > 1 ? 's' : ''} left
+          {countNotCompleted} item{countNotCompleted > 1 ? 's' : ''} left
         </div>
         <div class="status">
           {#each statuses as status}
