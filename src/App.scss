@@ -27,6 +27,10 @@ main {
     font-weight: 300;
     text-align: center;
     color: rgba($primary-color, 0.15);
+
+    @include mobile {
+      font-size: 60px;
+    }
   }
 
   .wrap-todo {

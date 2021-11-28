@@ -74,13 +74,17 @@ function createTodo() {
   }
 
   const editTitle = (id: string, title: string) => {
-    if (!id || !title) {
+    if (!id) {
       return
     }
     update((prev) => {
-      const editedId = prev.items.findIndex((todo) => todo.id === id)
-      if (editedId) {
-        prev.items[editedId].title = title
+      if (!title) {
+        prev.items = prev.items.filter((todo) => todo.id !== id)
+      } else {
+        const editedId = prev.items.findIndex((todo) => todo.id === id)
+        if (editedId) {
+          prev.items[editedId].title = title
+        }
       }
       return prev
     })

@@ -17,12 +17,11 @@
     max-width: 82%;
     position: relative;
     flex: 1;
-    // padding: 13px 2px;
+    min-height: 55px;
     .title {
       text-align: left;
-      margin-left: 10px;
       word-break: break-all;
-      margin: 13px 2px;
+      margin: 13px 32px 13px 2px;
       padding-left: 8px;
     }
 

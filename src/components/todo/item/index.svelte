@@ -32,15 +32,15 @@
     showInput = false
   }
 
-  const onKeyUp = (event: KeyboardEvent) => {
+  const onChangeInput = (event: Event) => {
     const target = event.target as HTMLInputElement
-    if (!target.value.trim()) {
-      return
-    }
 
+    todoStore.editTitle(todo.id, target.value)
+  }
+
+  const onKeyUp = (event: KeyboardEvent) => {
     dispatchForCode(event, (key) => {
       if ([13, 'Enter', 'Escape'].includes(key)) {
-        todoStore.editTitle(todo.id, target.value)
         showInput = false
       }
     })
@@ -71,10 +71,11 @@
     <!-- svelte-ignore a11y-autofocus -->
     <input
       class={clsx('edit', { open: showInput })}
-      bind:value={todo.title}
       on:keyup={onKeyUp}
-      autofocus={showInput}
+      on:change={onChangeInput}
+      bind:value={todo.title}
       bind:this={inputRef}
+      autofocus={showInput}
     />
   </div>
   <img
