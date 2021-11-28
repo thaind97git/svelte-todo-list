@@ -65,18 +65,21 @@
     on:clickOutside={onClickOutside}
     use:ClickOutside
   >
-    <p id={todo.id} class="title">
-      {todo.title}
-    </p>
-    <!-- svelte-ignore a11y-autofocus -->
-    <input
-      class={clsx('edit', { open: showInput })}
-      on:keyup={onKeyUp}
-      on:change={onChangeInput}
-      bind:value={todo.title}
-      bind:this={inputRef}
-      autofocus={showInput}
-    />
+    {#if showInput}
+      <!-- svelte-ignore a11y-autofocus -->
+      <input
+        class={clsx('edit', { open: showInput })}
+        on:keyup={onKeyUp}
+        on:change={onChangeInput}
+        bind:value={todo.title}
+        bind:this={inputRef}
+        autofocus={showInput}
+      />
+    {:else}
+      <p id={todo.id} class="title">
+        {todo.title}
+      </p>
+    {/if}
   </div>
   <img
     class={clsx('cancel-img', { hidden: showInput })}

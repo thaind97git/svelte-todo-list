@@ -14,14 +14,14 @@
   }
 
   .todo-value {
-    max-width: 82%;
+    max-width: calc(100% - 100px);
     position: relative;
     flex: 1;
     min-height: 55px;
     .title {
       text-align: left;
       word-break: break-all;
-      margin: 13px 32px 13px 2px;
+      margin: 13px 2px;
       padding-left: 8px;
     }
 
@@ -36,12 +36,8 @@
       border: 1px solid #999;
       box-shadow: inset 0 -1px 5px 0 rgb(0 0 0 / 20%);
       outline: none;
-      visibility: hidden;
       font-weight: 300;
       padding: 0px 8px;
-      &.open {
-        visibility: visible;
-      }
     }
   }
 
